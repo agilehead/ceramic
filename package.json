@@ -4,41 +4,37 @@
     "email": "jeswinpk@agilehead.com"
   },
   "name": "ceramic",
-  "version": "0.1.0",
-  "description": "Object Database Mapper with ES6 Generators-based async API",
+  "version": "0.2.2",
+  "description": "Serialization and validation for datatypes based on JSON Schema",
   "repository": {
     "type": "git",
     "url": "https://github.com/jeswin/ceramic.git"
   },
+  "dependencies": {},
   "main": "lib/ceramic",
-  "dependencies": {
-    "fora-node-thunkify": "*",
-    "ceramic-validator": "*"
-  },
-  "devDependencies": {},
   "engines": {
     "node": ">= 0.11.9"
   },
   "keywords": [
-    "orm",
-    "object database mapper"
+    "fora",
+    "data types"
   ],
   "license": "GPL-3.0+",
   "bugs": {
     "url": "https://github.com/jeswin/ceramic/issues"
   },
-  "homepage": "https://github.com/jeswin/ceramic",
   "maintainers": [
     {
       "name": "jeswin",
       "email": "jeswinpk@agilehead.com"
     }
   ],
-  "readme": "ceramic\n=======\n\nObject Database Mapper with ES6 Generators-based async API\n",
+  "readme": "ceramic\n=====================\n\nSerialization and validation for datatypes based on JSON Schema\n",
   "readmeFilename": "README.md",
-  "gitHead": "7c62750878680627cfb4fb96f4311b3dddd099ed",
-  "_id": "ceramic@0.1.0",
+  "gitHead": "bf5bcbfcc9b5ef4d4a9e9b27cdd8bba193628413",
+  "homepage": "https://github.com/jeswin/ceramic",
+  "_id": "ceramic@0.2.1",
   "scripts": {},
-  "_shasum": "4927e7d822d405b4f784530f9a9b8cc88e99815a",
+  "_shasum": "aec65fbd3d096be98e405de83278657eb883cc4e",
   "_from": "ceramic@*"
 }
