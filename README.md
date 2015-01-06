@@ -84,4 +84,19 @@ var blogPost = yield* ceramic.constructModel(blogPostJSON, postSchema);
 console.log(blogPost.constructor === BlogPost);
 ```
 
+### Validation
+ceramic currently does only basic validation.
+- Type mismatch (eg: schema says age is a number, but got string)
+- Required fields
+- Array max length and min length
+- Whether a property value was constructed with the right constructor (eg: post.author.constructor === Author)
+
+```
+//Returns true/false based on whether the object matches JSON schema
+ceramic.validate(someObject, schema);
+```
+
+
+
+
 
