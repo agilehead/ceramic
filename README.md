@@ -1,4 +1,3 @@
 ceramic
 =======
-
-Object Database Mapper with ES6 Generators-based async API
+Serialization and validation for datatypes based on JSON Schema
