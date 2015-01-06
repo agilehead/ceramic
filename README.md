@@ -33,6 +33,8 @@ npm install ceramic
 
 ### Usage
 ```
+var Ceramic = require("ceramic");
+
 var Author = function() {
   //constructor
 };
@@ -96,7 +98,68 @@ ceramic currently does only basic validation.
 ceramic.validate(someObject, schema);
 ```
 
+### Virtual Types
 
+The beauty of document-based databases is that document structure is not necessarily rigid. We might use a single collection (or table) to store objects with differing schemas, some of which may even be user-defined. For example, the Records collection might store objects of type text-posts, video-posts or short-stories.  
 
+Ceramic supports this through a concept called virtual-schemas. Virtual-schemas extend a base-schema with additional properties. To identify which virtual-schema to use, the base-schema must define a discriminator. 
+Objects created from the virtual-schemas will have their constructor set to that defined in the base-schema.
 
+Here is an example:
+```
+var recordSchema = {
+    name: 'record',
+    discriminator: function*(obj, ceramic) {
+      return yield* ceramic.getTypeDefinition(obj.recordType);
+    },
+    schema: {
+        type: 'object',
+        properties: {
+            uniqueId: { type: 'string' },
+            createdBy: { $ref: 'user' },
+            recordType: { type: 'string' }
+        },
+        required: ['uniqueId', 'createdBy']
+    }
+};
+
+var textPostSchema = {
+  "name": "text-post",
+  "schema": {
+      "type": "object",
+      "properties": {
+          "title": { "type": "string", "maxLength": 200 },
+          "subtitle": { "type": "string", "maxLength": 200 },
+          "content": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["title", "content"]
+  }
+}
+
+var videoPostSchema = {
+  "name": "video-post",
+  "schema": {
+      "type": "object",
+      "properties": {
+          "title": { "type": "string", "maxLength": 200 },
+          "url": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["title", "url"]
+  }
+}
+
+var ceramic = new Ceramic();
+yield* ceramic.init(
+  [recordSchema],
+  [{ typeDefinitions: [textPostSchema, videoPostSchema], baseTypeDefinition: recordSchema }]
+);
+
+var records = [];
+var recordsJSON = yield* recordsService.getAll();
+for (var i = 0; i < recordsJSON.length; i++) {
+  records.push(yield* ceramic.constructModel(recordsJSON[i], recordSchema);
+}
+// records[0] might be a text-post, records[1] might be a "video-post" etc.
+// This is automatically handled.
+```
 
