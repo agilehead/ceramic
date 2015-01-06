@@ -22,9 +22,50 @@ var blogPost = ceramic.constructModel(postJSON, schema);
 //blogPost.author.constructor === Author (true)
 ```
 
-Ceramic also comes with two optional batteries, ceramic-db (https://github.com/jeswin/ceramic-db) and ceramic-http-parser (https://github.com/jeswin/ceramic-http-parser). Ceramic-db is an ODM (Object Document Mapper) with a clean ES6-Generators based API. Ceramic-http-parser parses an HTTP request and converts it into a complex-type using ceramic. 
+Ceramic also comes with two optional batteries, ceramic-db (https://github.com/jeswin/ceramic-db) and ceramic-http-parser (https://github.com/jeswin/ceramic-http-parser). Ceramic-db is an ODM (Object Document Mapper) with an ES6-Generators based API. Ceramic-http-parser parses an HTTP request and converts it into a complex-type using ceramic. 
 
+### Installation
+npm install ceramic
 
-Getting Started
----------------
+### Define your schemas
+```
+var Author = function() {
+  //constructor
+};
+
+var authorSchema = {
+    name: 'author',
+    schema: {
+        type: 'object',
+        properties: {
+            name: { type: 'string' },
+            location: { type: 'string' },
+            age: { type: 'number' }
+        },
+        required: ['name', 'location']
+    }
+};
+
+authorSchema.ctor = Author;
+
+var BlogPost = function() {
+  //constructor
+};
+
+var postSchema = {
+    name: 'post',
+    schema: {
+        type: 'object',
+        properties: {
+            title: { type: 'string' },
+            content: { type: 'string' },
+            published: { type: 'string' },
+            author: { $ref: 'author' }
+        },
+        required: ['title', 'content', 'author']
+    }
+};
+
+postSchema.ctor = BlogPost;
+```
 
