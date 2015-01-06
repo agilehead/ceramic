@@ -22,7 +22,9 @@ var blogPost = yield* ceramic.constructModel(postJSON, schema);
 //blogPost.author.constructor === Author (true)
 ```
 
-Ceramic also comes with two optional batteries, ceramic-db (https://github.com/jeswin/ceramic-db) and ceramic-http-parser (https://github.com/jeswin/ceramic-http-parser). Ceramic-db is an ODM (Object Document Mapper) with an ES6-Generators based API. Ceramic-http-parser parses an HTTP request and converts it into a complex-type using ceramic. 
+Ceramic also comes with two optional batteries, ceramic-db (https://github.com/jeswin/ceramic-db) and ceramic-http-parser (https://github.com/jeswin/ceramic-http-parser). Ceramic-db is an Object Document Mapper (ODM). Ceramic-http-parser parses an HTTP request and converts it into a complex-type using ceramic. 
+
+All ceramic projects use ES6 Generators instead of callbacks for async. So you'd have to run with node with the --harmony flag or use regenerator to transpile code into to ES5. 
 
 ## Let's get started
 
