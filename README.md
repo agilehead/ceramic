@@ -29,7 +29,7 @@ Ceramic also comes with two optional batteries, ceramic-db (https://github.com/j
 ### Installation
 npm install ceramic
 
-### Create your schemas
+### Usage
 ```
 var Author = function() {
   //constructor
