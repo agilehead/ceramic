@@ -58,8 +58,21 @@ describe("Ceramic Core", function() {
 
     it("completeEntitySchema must complete the entitySchema", function() {
         return co(function*() {
+            var songSchema = {
+                name: 'ticket',
+                schema: {
+                    type: 'object',
+                    properties: {
+                        title: { type: 'string' },
+                        artist: { type: 'string' },
+                        price: { type: 'number' }
+                    },
+                    required: ['title', 'artist']
+                }
+            };
+
             var ceramic = new Ceramic();
-            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
+            var entitySchema = ceramic.completeEntitySchema(songSchema);
             //TODO: asserts
         });
     });
@@ -67,14 +80,36 @@ describe("Ceramic Core", function() {
 
     it("completeVirtualEntitySchema must complete the virtualEntitySchema", function() {
         return co(function*() {
+            var songSchema = {
+                name: 'ticket',
+                schema: {
+                    type: 'object',
+                    properties: {
+                        title: { type: 'string' },
+                        artist: { type: 'string' },
+                        price: { type: 'number' }
+                    },
+                    required: ['title', 'artist']
+                }
+            };
+
+            var mp3Schema = {
+                schema: {
+                    properties: {
+                        bitrate: { type: 'number' }
+                    }
+                },
+                required: ['bitrate']
+            };
+
             var ceramic = new Ceramic();
-            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
+            var entitySchema = ceramic.completeVirtualEntitySchema(mp3Schema, songSchema);
             //TODO: asserts
         });
     });
 
 
-    it("init must create a type cache", function() {
+    it("init must create a schema cache", function() {
         return co(function*() {
             var ceramic = new Ceramic();
             var typeCache = yield* ceramic.init([authorSchema, postSchema]);
@@ -93,7 +128,7 @@ describe("Ceramic Core", function() {
 
 
 
-    it("updateModel must create a type cache", function() {
+    it("updateModel must create a schema cache", function() {
         return co(function*() {
             var ceramic = new Ceramic();
             var typeCache = yield* ceramic.init([authorSchema, postSchema]);
@@ -102,7 +137,13 @@ describe("Ceramic Core", function() {
     });
 
 
-
+    it("validate must compare entity against an entitySchema", function() {
+        return co(function*() {
+            var ceramic = new Ceramic();
+            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
+            //TODO: asserts
+        });
+    });
 
 
     after(function() {
