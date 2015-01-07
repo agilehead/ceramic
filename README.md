@@ -1,30 +1,10 @@
 Ceramic
 =======
-Based on JSON-Schema, ceramic can map simple JSON into traversable entities that the application logic uses.
+Based on JSON-Schema, ceramic can map simple JSON into domain entities used in the application. It can also validate entities against constraints specified in the schema.
 
-This is best explained with an example. Assume you fetched the following blog post data from the DB or a Web Service:
-```
-var postJSON = {
-  "title": "Intro to Node.JS",
-  "content": ".....",
-  "published": "12-12-2014",
-  "author": {
-    "id": "jeswin",
-    "location": "Bangalore"
-  }
-}
-```
+Ceramic also comes with two optional batteries, ceramic-db (https://github.com/jeswin/ceramic-db) and ceramic-http-parser (https://github.com/jeswin/ceramic-http-parser). Ceramic-db is an Object Document Mapper (ODM). Ceramic-http-parser parses an HTTP request and converts it into a complex-type using ceramic.
 
-Ceramic can convert this into domain entities your application uses, such as BlogPost and Author.
-```
-var blogPost = yield* ceramic.constructModel(postJSON, schema);
-//blogPost.constructor === BlogPost (true)
-//blogPost.author.constructor === Author (true)
-```
-
-Ceramic also comes with two optional batteries, ceramic-db (https://github.com/jeswin/ceramic-db) and ceramic-http-parser (https://github.com/jeswin/ceramic-http-parser). Ceramic-db is an Object Document Mapper (ODM). Ceramic-http-parser parses an HTTP request and converts it into a complex-type using ceramic. 
-
-All ceramic projects use ES6 Generators instead of callbacks for async. So you'd have to run with node with the --harmony flag or use regenerator to transpile code into to ES5. 
+All ceramic projects use ES6 Generators instead of callbacks for async. So you'd have to run wth node with the --harmony flag or use regenerator to transpile code into to ES5.
 
 ## Let's get started
 
@@ -102,7 +82,7 @@ ceramic.validate(someObject, schema);
 
 The beauty of document-based databases is that document structure is not necessarily rigid. We might use a single collection (or table) to store objects with differing schemas, some of which may even be user-defined. For example, the Records collection might store objects of type text-posts, video-posts or short-stories.  
 
-Ceramic supports this through a concept called virtual-schemas. Virtual-schemas extend a base-schema with additional properties. To identify which virtual-schema to use, the base-schema must define a discriminator. 
+Ceramic supports this through a concept called virtual-schemas. Virtual-schemas extend a base-schema with additional properties. To identify which virtual-schema to use, the base-schema must define a discriminator.
 Objects created from the virtual-schemas will have their constructor set to that defined in the base-schema.
 
 Here is an example:
@@ -162,4 +142,3 @@ for (var i = 0; i < recordsJSON.length; i++) {
 // records[0] might be a text-post, records[1] might be a "video-post" etc.
 // This is automatically handled.
 ```
-

@@ -11,6 +11,10 @@
     "url": "https://github.com/jeswin/ceramic.git"
   },
   "dependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
   "main": "lib/ceramic",
   "engines": {
     "node": ">= 0.11.9"
