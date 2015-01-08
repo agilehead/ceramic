@@ -16,7 +16,8 @@
   "devDependencies": {
     "istanbul-harmony": "0",
     "mocha": "^2.0.0",
-    "mz": "^1.0.2"
+    "mz": "^1.0.2",
+    "assert": "*"
   },
   "main": "lib/ceramic",
   "engines": {

@@ -1,4 +1,5 @@
 var co = require('co');
+var assert = require('assert');
 
 describe("Ceramic Core", function() {
     var Author, BlogPost;
@@ -9,9 +10,11 @@ describe("Ceramic Core", function() {
         return co(function*() {
             Ceramic = require("../lib/ceramic");
 
-            var Author = function(params) {
-                for(var key of params) {
-                    this[key] = params[key];
+            Author = function(params) {
+                if (params) {
+                    for(var key in params) {
+                        this[key] = params[key];
+                    }
                 }
             };
 
@@ -31,8 +34,10 @@ describe("Ceramic Core", function() {
             authorSchema.ctor = Author;
 
             BlogPost = function(params) {
-                for(var key of params) {
-                    this[key] = params[key];
+                if (params) {
+                    for(var key in params) {
+                        this[key] = params[key];
+                    }
                 }
             };
 
@@ -72,8 +77,9 @@ describe("Ceramic Core", function() {
             };
 
             var ceramic = new Ceramic();
-            var entitySchema = ceramic.completeEntitySchema(songSchema);
-            //TODO: asserts
+            var entitySchema = yield* ceramic.completeEntitySchema(songSchema);
+            assert.notEqual(entitySchema, null);
+            assert.equal(entitySchema.schema.required.length, 2);
         });
     });
 
@@ -97,14 +103,14 @@ describe("Ceramic Core", function() {
                 schema: {
                     properties: {
                         bitrate: { type: 'number' }
-                    }
-                },
-                required: ['bitrate']
+                    },
+                    required: ['bitrate']
+                }
             };
 
             var ceramic = new Ceramic();
-            var entitySchema = ceramic.completeVirtualEntitySchema(mp3Schema, songSchema);
-            //TODO: asserts
+            var entitySchema = yield* ceramic.completeVirtualEntitySchema(mp3Schema, songSchema);
+            assert.equal(entitySchema.schema.required.length, 3);
         });
     });
 
@@ -112,23 +118,34 @@ describe("Ceramic Core", function() {
     it("init must create a schema cache", function() {
         return co(function*() {
             var ceramic = new Ceramic();
-            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
-            //TODO: asserts
+            var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
+            assert.equal(Object.keys(schemaCache).length, 2);
         });
     });
 
 
-    it("constructModel must create a construct a model", function() {
+    it("constructEntity must create a construct a model", function() {
         return co(function*() {
             var ceramic = new Ceramic();
-            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
-            //TODO: asserts
+            var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
+            var blogPostJSON = {
+                title: "Busy Being Born",
+                content: "The days keep dragging on, Those rats keep pushing on,  The slowest race around, We all just race around ...",
+                published: "yes",
+                author: {
+                    name: "Middle Class Rut",
+                    location: "USA",
+                }
+            };
+            var blogPost = yield* ceramic.constructEntity(blogPostJSON, postSchema);
+            assert.equal(blogPost instanceof BlogPost, true, "blogPost must be an instanceof BlogPost");
+            assert.equal(blogPost.author instanceof Author, true, "blogPost must be an instanceof Author");
         });
     });
 
 
 
-    it("updateModel must create a schema cache", function() {
+    it("updateEntity must create a schema cache", function() {
         return co(function*() {
             var ceramic = new Ceramic();
             var typeCache = yield* ceramic.init([authorSchema, postSchema]);
