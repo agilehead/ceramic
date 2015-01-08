@@ -124,7 +124,7 @@ describe("Ceramic Core", function() {
     });
 
 
-    it("constructEntity must create a construct a model", function() {
+    it("constructEntity must construct a model", function() {
         return co(function*() {
             var ceramic = new Ceramic();
             var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
@@ -145,27 +145,75 @@ describe("Ceramic Core", function() {
 
 
 
-    it("updateEntity must create a schema cache", function() {
+    it("updateEntity must update a model", function() {
         return co(function*() {
+            var blogPost = new BlogPost({
+                title: "---",
+                content: "---"
+            });
             var ceramic = new Ceramic();
-            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
-            //TODO: asserts
+            var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
+            var blogPostJSON = {
+                title: "Busy Being Born",
+                content: "The days keep dragging on, Those rats keep pushing on,  The slowest race around, We all just race around ...",
+                published: "yes",
+                author: {
+                    name: "Middle Class Rut",
+                    location: "USA",
+                }
+            };
+            yield* ceramic.updateEntity(blogPost, blogPostJSON, postSchema);
+            assert.equal(blogPost instanceof BlogPost, true, "blogPost must be an instanceof BlogPost");
+            assert.equal(blogPost.author instanceof Author, true, "blogPost must be an instanceof Author");
+            assert.equal(blogPost.title, "Busy Being Born", "blogPost.title must be Busy Being Born");
         });
     });
 
 
-    it("validate must compare entity against an entitySchema", function() {
+    it("validate must return errors for incorrect schema", function() {
         return co(function*() {
             var ceramic = new Ceramic();
             var typeCache = yield* ceramic.init([authorSchema, postSchema]);
-            //TODO: asserts
+            var blogPost = new BlogPost({
+                title: "---",
+                content: "---"
+            });
+            var errors = yield* ceramic.validate(blogPost, postSchema);
+            assert.equal(errors.length > 0, true);
         });
     });
 
 
-    after(function() {
+    it("validate must return errors for incorrect author field", function() {
         return co(function*() {
-            var a = 1;
+            var ceramic = new Ceramic();
+            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
+            var blogPost = new BlogPost({
+                title: "---",
+                content: "---",
+                author: "jeswin"
+            });
+            var errors = yield* ceramic.validate(blogPost, postSchema);
+            assert.equal(errors.length > 0, true);
+        });
+    });
+
+
+    it("validate must return no errors for correct schema", function() {
+        return co(function*() {
+            var ceramic = new Ceramic();
+            var typeCache = yield* ceramic.init([authorSchema, postSchema]);
+            var blogPost = new BlogPost({
+                title: "Busy Being Born",
+                content: "The days keep dragging on, Those rats keep pushing on,  The slowest race around, We all just race around ...",
+                published: "yes",
+                author: new Author({
+                    name: "jeswin",
+                    location: "bangalore"
+                })
+            });
+            var errors = yield* ceramic.validate(blogPost, postSchema);
+            assert.equal(errors.length, 0);
         });
     });
 });
