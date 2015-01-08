@@ -78,7 +78,7 @@ ceramic currently does only basic validation.
 ceramic.validate(someObject, schema);
 ```
 
-### Virtual Types
+### Virtual Schemas
 
 The beauty of document-based databases is that document structure is not necessarily rigid. We might use a single collection (or table) to store objects with differing schemas, some of which may even be user-defined. For example, the Records collection might store objects of type text-posts, video-posts or short-stories.  
 
@@ -90,7 +90,7 @@ Here is an example:
 var recordSchema = {
     name: 'record',
     discriminator: function*(obj, ceramic) {
-      return yield* ceramic.getTypeDefinition(obj.recordType);
+      return yield* ceramic.getEntitySchema(obj.recordType);
     },
     schema: {
         type: 'object',
@@ -131,7 +131,7 @@ var videoPostSchema = {
 var ceramic = new Ceramic();
 yield* ceramic.init(
   [recordSchema],
-  [{ typeDefinitions: [textPostSchema, videoPostSchema], baseTypeDefinition: recordSchema }]
+  [{ entitySchemas: [textPostSchema, videoPostSchema], baseEntitySchema: recordSchema }]
 );
 
 var records = [];
