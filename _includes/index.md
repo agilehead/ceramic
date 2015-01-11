@@ -184,6 +184,67 @@ console.log(errors.length); //Prints 0
 {% endhighlight %}
 
 
-### Dynamic Virtual Schemas
+### Dynamic Schemas (Advanced)
 
-In addition to pre-defined schemas, Ceramic can dynamically load virtual-schemas from the disk.
+The simplest way to use Ceramic is to load all the schemas while calling ceramic.init(). But some apps might have dozens (or hundreds) of user-defined schemas stored on the disk that need not be preloaded during init() for performance reasons. Ceramic supports dynamic schemas to address this use case.
+
+If Ceramic comes across a schema (or schema name) that it isn't aware, it tries to call a custom dynamic schema loader function. The schema loader function must be provided in Ceramic's constructor, and must return a valid schema when invoked.
+
+{% highlight javascript %}
+
+var songSchema = {
+    name: 'song',
+    schema: {
+        type: 'object',
+        properties: {
+            title: { type: 'string' },
+            artist: { type: 'string' },
+            price: { type: 'number' },
+            torrent: { $ref: 'torrent' }
+        },
+        required: ['title', 'artist']
+    }
+};
+
+var torrentSchema = {
+    name: "torrent",
+    schema: {
+        properties: {
+            fileName: { type: 'string' },
+            seeds: { type: 'number' },
+            leeches: { type: 'number' }
+        },
+        required: ['fileName', 'seeds', 'leeches']
+    }
+};
+
+var dynamicLoader = function*(name, dynamicResolutionContext) {
+    switch(name) {
+        case "torrent":
+            return yield* ceramic.completeEntitySchema(torrentSchema);
+    }
+};
+
+var ceramic = new Ceramic({
+    fn: { getDynamicEntitySchema: dynamicLoader }
+});
+
+//song schema references torrent schema, but is not provided during init.
+var schemaCache = yield* ceramic.init([songSchema]);
+
+var songJSON = {
+    title: "Busy Being Born",
+    artist: "Middle Class Rut",
+    price: 10,
+    torrent: {
+        fileName: "busy-being-born.mp3",
+        seeds: 1000,
+        leeches: 1100
+    }
+};
+
+var mp3 = yield* ceramic.constructEntity(songJSON, songSchema, { validate: true });
+
+console.log(mp3);
+
+{% endhighlight %}
