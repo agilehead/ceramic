@@ -248,3 +248,21 @@ var mp3 = yield* ceramic.constructEntity(songJSON, songSchema, { validate: true 
 console.log(mp3);
 
 {% endhighlight %}
+
+
+### Must Construct? (Advanced)
+
+Ceramic will not try to construct an object against a schema if ceramic.mustConstruct() returns false.
+You can override the default mustConstruct() behavior (which is true), by providing a custom mustConstruct while creating a Ceramic instance.
+
+{% highlight javascript %}
+
+var ceramic = new Ceramic({
+    fn: {
+        mustConstruct: function() {
+            //...
+        }
+    }
+});
+
+{% endhighlight %}
