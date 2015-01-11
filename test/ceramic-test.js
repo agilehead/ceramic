@@ -144,6 +144,63 @@ describe("Ceramic Core", function() {
     });
 
 
+    it("constructEntity must construct a model with virtual-schema", function() {
+        return co(function*() {
+            var songSchema = {
+                name: 'ticket',
+                discriminator: function*(obj, ceramic) {
+                    return yield* ceramic   .getEntitySchema(obj.type);
+                },
+                schema: {
+                    type: 'object',
+                    properties: {
+                        title: { type: 'string' },
+                        artist: { type: 'string' },
+                        price: { type: 'number' },
+                        type: { type: 'string' }
+                    },
+                    required: ['title', 'artist']
+                }
+            };
+
+            var mp3Schema = {
+                name: "mp3",
+                schema: {
+                    properties: {
+                        bitrate: { type: 'number' }
+                    },
+                    required: ['bitrate']
+                }
+            };
+            var youtubeVideoSchema = {
+                name: "youtube",
+                schema: {
+                    properties: {
+                        url: { type: 'string' },
+                        highDef: { type: 'boolean' }
+                    },
+                    required: ['url', 'highDef']
+                }
+            };
+
+            var ceramic = new Ceramic();
+            var schemaCache = yield* ceramic.init(
+                [songSchema], //schemas
+                [{ entitySchemas: [mp3Schema, youtubeVideoSchema], baseEntitySchema: songSchema }] //virtual-schemas
+            );
+
+            var mp3JSON = {
+                "type": "mp3",
+                "title": "Busy Being Born",
+                "artist": "Middle Class Rut",
+                "bitrate": 320
+            };
+
+            var mp3 = yield* ceramic.constructEntity(mp3JSON, songSchema, { validate: true });
+            assert.equal(mp3.bitrate, 320);
+        });
+    });
+
 
     it("updateEntity must update a model", function() {
         return co(function*() {
