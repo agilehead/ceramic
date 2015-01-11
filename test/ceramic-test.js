@@ -20,6 +20,7 @@ describe("Ceramic Core", function() {
 
             authorSchema = {
                 name: 'author',
+                ctor: Author,
                 schema: {
                     type: 'object',
                     properties: {
@@ -31,8 +32,6 @@ describe("Ceramic Core", function() {
                 }
             };
 
-            authorSchema.ctor = Author;
-
             BlogPost = function(params) {
                 if (params) {
                     for(var key in params) {
@@ -43,6 +42,7 @@ describe("Ceramic Core", function() {
 
             postSchema = {
                 name: 'post',
+                ctor: BlogPost,
                 schema: {
                     type: 'object',
                     properties: {
@@ -54,8 +54,6 @@ describe("Ceramic Core", function() {
                     required: ['title', 'content', 'author']
                 }
             };
-
-            postSchema.ctor = BlogPost;
 
         });
     });
@@ -149,7 +147,7 @@ describe("Ceramic Core", function() {
             var songSchema = {
                 name: 'ticket',
                 discriminator: function*(obj, ceramic) {
-                    return yield* ceramic   .getEntitySchema(obj.type);
+                    return yield* ceramic.getEntitySchema(obj.type);
                 },
                 schema: {
                     type: 'object',
@@ -186,7 +184,12 @@ describe("Ceramic Core", function() {
             var ceramic = new Ceramic();
             var schemaCache = yield* ceramic.init(
                 [songSchema], //schemas
-                [{ entitySchemas: [mp3Schema, youtubeVideoSchema], baseEntitySchema: songSchema }] //virtual-schemas
+                [
+                    {
+                        entitySchemas: [mp3Schema, youtubeVideoSchema],
+                        baseEntitySchema: songSchema
+                    }
+                ] //virtual-schemas
             );
 
             var mp3JSON = {
