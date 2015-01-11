@@ -1,7 +1,27 @@
 body {
-    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 0;
 }
+
+header.navbar { margin-bottom: 0 }
 
 .nav {
     font-size: 18px
+}
+
+.banner {
+    background-color: rgba(240, 245, 225, 0.8);
+    padding: 0.5em 2em 2em 2em
+}
+
+.jumbotron {
+    background: url(../images/cover.jpg) no-repeat;
+    background-size: cover;
+}
+
+footer {
+    background: rgb(218, 226, 187);
+    padding: 3em;
+    text-align: center;
+    margin-bottom: 0;
 }

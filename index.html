@@ -6,7 +6,7 @@ layout: default
 
     <div class="jumbotron">
         <div class="container">
-            <div class="col-md-8">
+            <div class="banner col-md-8">
                 <h1>Ceramic!</h1>
                 <p>
                     Based on JSON-Schema, ceramic can map simple JSON into domain entities used in the application. It can also validate entities against constraints specified in the schema.
@@ -24,6 +24,18 @@ layout: default
         <div class="col-md-8">
             {% capture index %}{% include index.md %}{% endcapture %}
             {{ index | append:'' | markdownify }}
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#installation">Installation</a></li>
+                <li class="list-group-item"><a href="#usage">Usage</a></li>
+                <li class="list-group-item"><a href="#virtual-schemas">Virtual Schemas</a></li>
+                <li class="list-group-item"><a href="#validation">Validation</a></li>
+                <li class="list-group-item"><a href="#dynamic-schemas">Dynamic Schemas</a></li>
+                <li class="list-group-item"><a href="#advanced">Advanced</a></li>
+                <li class="list-group-item"><a href="/ceramic-db/">Ceramic Db</a></li>
+                <li class="list-group-item"><a href="/ceramic-http-parser/">Ceramic Http Parser</a></li>
+            </ul>
         </div>
     </div>
 </div>

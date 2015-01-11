@@ -1,5 +1,3 @@
-### Ceramic needs ES6 Generators
-
 All ceramic projects use ES6 Generators instead of callbacks for async. So you'd have to run wth node with the --harmony flag or use regenerator to transpile code to ES5.
 
 ### Installation
@@ -266,3 +264,8 @@ var ceramic = new Ceramic({
 });
 
 {% endhighlight %}
+
+### More
+
+- [Issues](https://github.com/jeswin/ceramic/issues)
+- Pull requests welcome. Just follow the same coding conventions.
