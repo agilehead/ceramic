@@ -6,21 +6,24 @@ layout: default
 
     <div class="jumbotron">
         <div class="container">
-            <h1>Ceramic!</h1>
-            <p>
-                Based on JSON-Schema, ceramic can map simple JSON into domain entities used in the application. It can also validate entities against constraints specified in the schema.
-            </p>
-            <p>
-                Ceramic also comes with two optional batteries; <a href="http://jeswin.github.io/ceramic/ceramic-db">Ceramic-db</a>, an Object Document Mapper (ODM) and
-                <a href="http://jeswin.github.io/ceramic/ceramic-http-parser">Ceramic-http-parser</a>, a parser which converts HTTP form data to entities.
-            </p>
-            <p>
-            </p>    
+            <div class="col-md-8">
+                <h1>Ceramic!</h1>
+                <p>
+                    Based on JSON-Schema, ceramic can map simple JSON into domain entities used in the application. It can also validate entities against constraints specified in the schema.
+                </p>
+                <p>
+                    Ceramic also comes with two optional batteries; <a href="http://jeswin.github.io/ceramic/ceramic-db">Ceramic-db</a>, an Object Document Mapper (ODM) and
+                    <a href="http://jeswin.github.io/ceramic/ceramic-http-parser">Ceramic-http-parser</a>, a parser which converts HTTP form data to entities.
+                </p>
+                <p>
+                </p>
+            </div>
         </div>
     </div>
-
     <div class="container">
-        {% capture index %}{% include index.md %}{% endcapture %}
-        {{ index | append:'' | markdownify }}
+        <div class="col-md-8">
+            {% capture index %}{% include index.md %}{% endcapture %}
+            {{ index | append:'' | markdownify }}
+        </div>
     </div>
 </div>
