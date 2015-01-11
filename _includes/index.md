@@ -134,8 +134,13 @@ var ceramic = new Ceramic();
 // ceramic.init(schemas, virtualSchemas)
 // virtualSchemas is an array of virtualSchema definitions, as follows.
 var schemaCache = yield* ceramic.init(
-    [songSchema],
-    [{ entitySchemas: [mp3Schema, youtubeVideoSchema], baseEntitySchema: songSchema }]
+    [songSchema], //schemas
+    [
+        {
+            entitySchemas: [mp3Schema, youtubeVideoSchema],
+            baseEntitySchema: songSchema
+        }
+    ] //virtual-schemas
 );
 
 var mp3JSON = {
