@@ -23,9 +23,9 @@
                 };
 
                 authorSchema = {
-                    name: 'author',
                     ctor: Author,
                     schema: {
+                        id: 'author',
                         type: 'object',
                         properties: {
                             name: { type: 'string' },
@@ -45,9 +45,9 @@
                 };
 
                 postSchema = {
-                    name: 'post',
                     ctor: BlogPost,
                     schema: {
+                        id: 'post',
                         type: 'object',
                         properties: {
                             title: { type: 'string' },
@@ -66,8 +66,8 @@
         it("completeEntitySchema must complete the entitySchema", function() {
             return co(function*() {
                 var songSchema = {
-                    name: 'song',
                     schema: {
+                        id: 'song',
                         type: 'object',
                         properties: {
                             title: { type: 'string' },
@@ -89,8 +89,8 @@
         it("completeVirtualEntitySchema must complete the virtualEntitySchema", function() {
             return co(function*() {
                 var songSchema = {
-                    name: 'song',
                     schema: {
+                        id: 'song',
                         type: 'object',
                         properties: {
                             title: { type: 'string' },
@@ -103,6 +103,7 @@
 
                 var mp3Schema = {
                     schema: {
+                        id: 'mp3',
                         properties: {
                             bitrate: { type: 'number' }
                         },
@@ -149,11 +150,11 @@
         it("constructEntity must construct a model with virtual-schema", function() {
             return co(function*() {
                 var songSchema = {
-                    name: 'song',
                     discriminator: function*(obj, ceramic) {
                         return yield* ceramic.getEntitySchema(obj.type);
                     },
                     schema: {
+                        id: 'song',
                         type: 'object',
                         properties: {
                             title: { type: 'string' },
@@ -166,17 +167,18 @@
                 };
 
                 var mp3Schema = {
-                    name: "mp3",
                     schema: {
+                        id: "mp3",
                         properties: {
                             bitrate: { type: 'number' }
                         },
                         required: ['bitrate']
                     }
                 };
+
                 var youtubeVideoSchema = {
-                    name: "youtube",
                     schema: {
+                        id: "youtube",
                         properties: {
                             url: { type: 'string' },
                             highDef: { type: 'boolean' }
@@ -234,7 +236,7 @@
         });
 
 
-        it("validate must return errors for incorrect schema", function() {
+        it("validate must return an error for the missing author field", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
                 var typeCache = yield* ceramic.init([authorSchema, postSchema]);
@@ -243,22 +245,24 @@
                     content: "---"
                 });
                 var errors = yield* ceramic.validate(blogPost, postSchema);
-                assert.equal(errors.length > 0, true);
+                //Missing author
+                assert.equal(errors[0].constraintName, 'required');
             });
         });
 
 
-        it("validate must return errors for incorrect author field", function() {
+        it("validate must return an error for the mismatched author field type", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
                 var typeCache = yield* ceramic.init([authorSchema, postSchema]);
                 var blogPost = new BlogPost({
-                    title: "---",
-                    content: "---",
+                    title: "Ceramic Documentation",
+                    content: "See README.MD...",
                     author: "jeswin"
                 });
                 var errors = yield* ceramic.validate(blogPost, postSchema);
-                assert.equal(errors.length > 0, true);
+                //author field breaks the type constraint
+                assert.equal(errors[0].constraintName, 'type');
             });
         });
 
@@ -277,7 +281,7 @@
                     })
                 });
                 var errors = yield* ceramic.validate(blogPost, postSchema);
-                assert.equal(errors.length, 0);
+                assert.equal(errors, undefined);
             });
         });
 
@@ -286,8 +290,8 @@
         it("load a dynamic schema", function() {
             return co(function*() {
                 var songSchema = {
-                    name: 'song',
                     schema: {
+                        id: "song",
                         type: 'object',
                         properties: {
                             title: { type: 'string' },
@@ -300,8 +304,9 @@
                 };
 
                 var torrentSchema = {
-                    name: "torrent",
                     schema: {
+                        id: "torrent",
+                        type: "object",                        
                         properties: {
                             fileName: { type: 'string' },
                             seeds: { type: 'number' },
