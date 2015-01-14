@@ -4,7 +4,7 @@
     "email": "jeswinpk@agilehead.com"
   },
   "name": "ceramic",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Serialization and validation for datatypes based on JSON Schema",
   "repository": {
     "type": "git",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
       "co": "*",
-      "jayschema": "*"
+      "jayschema": "*",
+      "nodefunc-generatorify": "*"
   },
   "devDependencies": {
     "istanbul-harmony": "0",
