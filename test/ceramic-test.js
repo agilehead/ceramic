@@ -79,7 +79,7 @@
                 };
 
                 var ceramic = new Ceramic();
-                var entitySchema = yield ceramic.completeEntitySchema(songSchema);
+                var entitySchema = yield* ceramic.completeEntitySchema(songSchema);
                 assert.notEqual(entitySchema, null);
                 assert.equal(entitySchema.schema.required.length, 2);
             });
@@ -112,7 +112,7 @@
                 };
 
                 var ceramic = new Ceramic();
-                var entitySchema = yield ceramic.completeVirtualEntitySchema(mp3Schema, songSchema);
+                var entitySchema = yield* ceramic.completeVirtualEntitySchema(mp3Schema, songSchema);
                 assert.equal(entitySchema.schema.required.length, 3);
             });
         });
@@ -121,7 +121,7 @@
         it("init must create a schema cache", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
-                var schemaCache = yield ceramic.init([authorSchema, postSchema]);
+                var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
                 assert.equal(Object.keys(schemaCache).length, 2);
             });
         });
@@ -130,7 +130,7 @@
         it("constructEntity must construct a model", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
-                var schemaCache = yield ceramic.init([authorSchema, postSchema]);
+                var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
                 var blogPostJSON = {
                     title: "Busy Being Born",
                     content: "The days keep dragging on, Those rats keep pushing on,  The slowest race around, We all just race around ...",
@@ -140,7 +140,7 @@
                         location: "USA",
                     }
                 };
-                var blogPost = yield ceramic.constructEntity(blogPostJSON, postSchema);
+                var blogPost = yield* ceramic.constructEntity(blogPostJSON, postSchema);
                 assert.equal(blogPost instanceof BlogPost, true, "blogPost must be an instanceof BlogPost");
                 assert.equal(blogPost.author instanceof Author, true, "blogPost must be an instanceof Author");
             });
@@ -151,7 +151,7 @@
             return co(function*() {
                 var songSchema = {
                     discriminator: function*(obj, ceramic) {
-                        return yield ceramic.getEntitySchema(obj.type);
+                        return yield* ceramic.getEntitySchema(obj.type);
                     },
                     schema: {
                         id: 'song',
@@ -188,7 +188,7 @@
                 };
 
                 var ceramic = new Ceramic();
-                var schemaCache = yield ceramic.init(
+                var schemaCache = yield* ceramic.init(
                     [songSchema], //schemas
                     [
                         {
@@ -205,7 +205,7 @@
                     "bitrate": 320
                 };
 
-                var mp3 = yield ceramic.constructEntity(mp3JSON, songSchema, { validate: true });
+                var mp3 = yield* ceramic.constructEntity(mp3JSON, songSchema, { validate: true });
                 assert.equal(mp3.bitrate, 320);
             });
         });
@@ -218,7 +218,7 @@
                     content: "---"
                 });
                 var ceramic = new Ceramic();
-                var schemaCache = yield ceramic.init([authorSchema, postSchema]);
+                var schemaCache = yield* ceramic.init([authorSchema, postSchema]);
                 var blogPostJSON = {
                     title: "Busy Being Born",
                     content: "The days keep dragging on, Those rats keep pushing on,  The slowest race around, We all just race around ...",
@@ -228,7 +228,7 @@
                         location: "USA",
                     }
                 };
-                yield ceramic.updateEntity(blogPost, blogPostJSON, postSchema);
+                yield* ceramic.updateEntity(blogPost, blogPostJSON, postSchema);
                 assert.equal(blogPost instanceof BlogPost, true, "blogPost must be an instanceof BlogPost");
                 assert.equal(blogPost.author instanceof Author, true, "blogPost must be an instanceof Author");
                 assert.equal(blogPost.title, "Busy Being Born", "blogPost.title must be Busy Being Born");
@@ -239,12 +239,12 @@
         it("validate must return an error for the missing author field", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
-                var typeCache = yield ceramic.init([authorSchema, postSchema]);
+                var typeCache = yield* ceramic.init([authorSchema, postSchema]);
                 var blogPost = new BlogPost({
                     title: "---",
                     content: "---"
                 });
-                var errors = yield ceramic.validate(blogPost, postSchema);
+                var errors = yield* ceramic.validate(blogPost, postSchema);
                 //Missing author
                 assert.equal(errors[0].constraintName, 'required');
             });
@@ -254,13 +254,13 @@
         it("validate must return an error for the mismatched author field type", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
-                var typeCache = yield ceramic.init([authorSchema, postSchema]);
+                var typeCache = yield* ceramic.init([authorSchema, postSchema]);
                 var blogPost = new BlogPost({
                     title: "Ceramic Documentation",
                     content: "See README.MD...",
                     author: "jeswin"
                 });
-                var errors = yield ceramic.validate(blogPost, postSchema);
+                var errors = yield* ceramic.validate(blogPost, postSchema);
                 //author field breaks the type constraint
                 assert.equal(errors[0].constraintName, 'type');
             });
@@ -270,7 +270,7 @@
         it("validate must return no errors for correct schema", function() {
             return co(function*() {
                 var ceramic = new Ceramic();
-                var typeCache = yield ceramic.init([authorSchema, postSchema]);
+                var typeCache = yield* ceramic.init([authorSchema, postSchema]);
                 var blogPost = new BlogPost({
                     title: "Busy Being Born",
                     content: "The days keep dragging on, Those rats keep pushing on,  The slowest race around, We all just race around ...",
@@ -280,7 +280,7 @@
                         location: "bangalore"
                     })
                 });
-                var errors = yield ceramic.validate(blogPost, postSchema);
+                var errors = yield* ceramic.validate(blogPost, postSchema);
                 assert.equal(errors, undefined);
             });
         });
@@ -319,7 +319,7 @@
                 var dynamicLoader = function*(name, dynamicResolutionContext) {
                     switch(name) {
                         case "torrent":
-                            return yield ceramic.completeEntitySchema(torrentSchema);
+                            return yield* ceramic.completeEntitySchema(torrentSchema);
                     }
                 };
 
@@ -328,7 +328,7 @@
                 });
 
                 //song schema references torrent schema, but is not provided during init.
-                var schemaCache = yield ceramic.init([songSchema]);
+                var schemaCache = yield* ceramic.init([songSchema]);
 
                 var songJSON = {
                     title: "Busy Being Born",
@@ -341,7 +341,7 @@
                     }
                 };
 
-                var mp3 = yield ceramic.constructEntity(songJSON, songSchema, { validate: true });
+                var mp3 = yield* ceramic.constructEntity(songJSON, songSchema, { validate: true });
                 assert.equal(mp3.torrent.fileName, "busy-being-born.mp3");
             });
         });
