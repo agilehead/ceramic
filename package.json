@@ -4,7 +4,7 @@
     "email": "jeswinpk@agilehead.com"
   },
   "name": "ceramic",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Serialization and validation for datatypes based on JSON Schema",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "serialization",
     "odm", "orm"
   ],
-  "license": "GPL-3.0+",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jeswin/ceramic/issues"
   },
