@@ -4,11 +4,11 @@
     "email": "jeswinpk@agilehead.com"
   },
   "name": "ceramic",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Serialization and validation for datatypes based on JSON Schema",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jeswin/ceramic.git"
+    "url": "https://github.com/nodejam/ceramic.git"
   },
   "dependencies": {
     "co": "*",
@@ -30,7 +30,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jeswin/ceramic/issues"
+    "url": "https://github.com/nodejam/ceramic/issues"
   },
   "maintainers": [
     {
@@ -41,7 +41,7 @@
   "readme": "ceramic\n=====================\n\nSerialization and validation for datatypes based on JSON Schema\n",
   "readmeFilename": "README.md",
   "gitHead": "bf5bcbfcc9b5ef4d4a9e9b27cdd8bba193628413",
-  "homepage": "https://github.com/jeswin/ceramic",
+  "homepage": "https://github.com/nodejam/ceramic",
   "_id": "ceramic@0.2.1",
   "scripts": {},
   "_shasum": "aec65fbd3d096be98e405de83278657eb883cc4e",
